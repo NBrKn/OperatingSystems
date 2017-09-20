@@ -7,6 +7,10 @@
  Author: Nimish Sule
 */
 
+
+int pq[20];
+int top = 0;
+
 typedef struct process_table {
     int id;
     int at;
@@ -68,6 +72,9 @@ void initArr(proc p[], int n){
         p[i].wt = 0;
         p[i].tat = 0;
     }
+    for(i=0; i<20; i++){
+    	pq[i]=-;
+    }
 }
 
 // void calcWT(proc p[], exec t[], int n, int min_at){
@@ -106,6 +113,57 @@ void rr(proc p[], int n, int tq){
     //     t[i].id=-3;
     // }
     //setting minimum arrival time
+    
+    //queueing
+    int min_at = p[0].at;
+    int k = 0;
+    t[k].id = -1;
+    t[k].et = min_at;
+    int exec_rem = n;
+    int exec_time = min_at;
+    int exec_flag = 0;
+    int exec_period;
+    while(exec_rem){
+        // printf("exec_time:%d", exec_time);
+        // printf("exec_rem:%d", exec_rem);
+
+        for(i=0; i<n; i++){
+            // printf("\n%d", i);
+            // printArr(p, n);
+            if(p[i].at<=exec_time && p[i].rt>0){
+                exec_period = p[i].rt<tq ? p[i].rt : tq; 
+                if(k>0 && p[i].id == t[k].id){
+                    t[k].et+=exec_period;
+                } else {
+                    k++;
+                    t[k].id = p[i].id;
+                    t[k].et = exec_period;
+                }
+                p[i].rt-=exec_period;
+                exec_flag = 1;
+                if(p[i].rt==0){
+                    p[i].tat=exec_time-p[i].at+exec_period;
+                    p[i].wt=p[i].tat-p[i].bt;
+                    exec_rem--;
+                }
+                exec_time+=exec_period;
+                
+            }
+        }
+        if(!exec_flag){
+            if(t[k].id==-1){
+                t[k].et++;
+            } else {
+                k++;
+                t[k].id = -1;
+                t[k].et = 1;
+            }
+            exec_time++;    
+        }
+        exec_flag = 0;
+    }
+    
+    
     int min_at = p[0].at;
     int k = 0;
     t[k].id = -1;
