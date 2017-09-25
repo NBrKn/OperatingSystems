@@ -145,7 +145,7 @@ void rr(proc p[], int n, int tq){
             else break;
         }
         if(p[c_proc].rt<=0){
-            p[c_proc].tat=exec_time-p[c_proc].at+exec_period;
+            p[c_proc].tat=exec_time-p[c_proc].at;
             p[c_proc].wt=p[c_proc].tat-p[c_proc].bt;
             exec_rem--;
         }
@@ -154,9 +154,8 @@ void rr(proc p[], int n, int tq){
         }
         procQ.pop();
         c_proc = procQ.front();
-        exec_period = p[c_proc].rt>tq ? tq : p[c_proc].bt;
+        exec_period = p[c_proc].rt>tq ? tq : p[c_proc].rt;
     }
-    k++;
     t[k].id=-2;
     i=0;
     int counter=0;
